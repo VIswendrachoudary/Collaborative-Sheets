@@ -61,6 +61,12 @@ export default function Dashboard() {
   const { user, logout } = useAuth();
 
   useEffect(() => {
+    // Check if user is authenticated, redirect to login if not
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+
     // Fetch documents from Firestore API (always shows user docs + orphaned docs)
     const fetchDocuments = async () => {
       if (!user) return;
@@ -77,13 +83,11 @@ export default function Dashboard() {
         }
       } catch (error) {
         console.error('Error fetching documents:', error);
-        // Set empty array if Firebase fails
-        setDocuments([]);
       }
     };
 
     fetchDocuments();
-  }, [user]);
+  }, [user, router]);
 
   useEffect(() => {
     // Close profile menu when clicking outside
